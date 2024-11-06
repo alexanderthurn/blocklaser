@@ -33,8 +33,8 @@
 
 
     document.body.addEventListener('pointermove', event => {
-        let x = Math.floor(event.clientX / w) % app.screen.width
-        let y = Math.floor(event.clientY / h) % app.screen.height
+        let x = Math.floor(event.clientX / w) % xCount
+        let y = Math.floor(event.clientY / h) % yCount
         let i = Math.floor(xCount*y + x)
         let c = container.children[i]
         console.log(x,y,xCount, yCount, i,c)
