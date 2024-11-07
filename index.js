@@ -18,11 +18,16 @@
     let xCount = Math.ceil((app.screen.width-20) / w)
     let yCount = Math.ceil((app.screen.height-20) / h)
     let container = new PIXI.Container()
+    let container2 = new PIXI.Container()
     container.x = 10
     container.y = 10
     
     let clearAll = (c) => {
         container.children.forEach(c => { c.laser = 0})
+        while(container2.children[0]) { 
+            container2.removeChild(container2.children[0]);
+        }
+        gameMode.init(container, container2)
         c.laser = 100
     }
 
@@ -34,8 +39,6 @@
             .stroke('white')
             c.laser = 0
            
- 
-
             if (x === 0 && y === 0 ){
                 c = new PIXI.Graphics()
                 .rect(-w/2,-h/2, w,h)
@@ -64,6 +67,12 @@
 
    
     app.stage.addChild(container);
+    app.stage.addChild(container2);
+
+    
+
+    var gameMode = PHYS
+    gameMode.init(container, container2)
 
     var laserSpottedOn = (pixelX,pixelY) => {
         let x = Math.floor((pixelX-container.x)/ w) % xCount
@@ -136,5 +145,8 @@
         laserPointers.forEach(l => {
             laserSpottedOn(l.x,l.y)
         })
+
+        
+        gameMode.update(time.deltaMS, container, laserPointers)
     });
 })();
