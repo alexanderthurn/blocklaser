@@ -22,10 +22,13 @@
     for (let y = 0; y < yCount; y++) {
          for (let x = 0; x < xCount; x++) {
             let c = new PIXI.Graphics()
-            .rect(w*x,h*y, w,h)
+            .rect(-w/2,-h/2, w,h)
             .stroke('white')
+            c.x = w*x + w/2
+            c.y = h*y+ h/2
             c.laser = 0
             c.alpha = 0
+            c.rotation = 0
             container.addChild(c)
         }
     }
@@ -58,22 +61,28 @@
         event.stopPropagation();
     }, false);
 
-    app.ticker.add(() =>
+    app.ticker.add((time) =>
     {
+
+        var dtf = time.deltaMS / (1000.0/60.0)
+
         laserPointers.forEach(l => {
             laserSpottedOn(l.x,l.y)
         })
 
         container.children.forEach(c => {
-            if (c.laser > 0 && c.laser < 50) {
-                c.laser -= 0.5
+            if (c.laser > 0 && c.laser < 100) {
+                c.laser -= 0.1*dtf
+                if (c.laser > 50) {
+                    c.laser -= 0.5*dtf
+                }
                 if (c.laser < 0) {
                     c.laser = 0
                 }
             }
 
-            if (c.laser > 100 && c.laser < 150) {
-                c.laser -= 0.5
+            if (c.laser > 150 && c.laser < 175) {
+                c.laser -= 0.1*dtf
                 if (c.laser < 100) {
                     c.laser = 100
                 }
@@ -81,18 +90,22 @@
 
 
             if (c.laser > 200) {
-                c.laser = 0
+                c.laser = -50
+                c.angle = 0
             } else if (c.laser > 150) {
-                c.alpha = 0
+                c.alpha = 1.0 - (c.laser-150) / 50
+                c.angle = -((c.laser-150)/50-1)*4+Math.random()*((c.laser-150)/50-1)*8
             } else if (c.laser > 100) {
-                c.alpha = 1.0 - (c.laser-100) / 50
+                c.alpha = 1
+                c.angle = 0
             } else if (c.laser > 50) {
-               c.alpha = 1
+               c.alpha = c.laser / 100
+               c.angle = -(c.laser/50-1)*4+Math.random()*(c.laser/50-1)*8
             } else {
-                c.alpha = c.laser / 50
+                c.alpha = c.laser / 100
+                c.angle = 0
             } 
 
         })
-        //container.rotation += 0.01;
     });
 })();
