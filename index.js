@@ -41,12 +41,8 @@
         let y = Math.floor(pixelY / h) % yCount
         let i = Math.floor(xCount*y + x)
         let c = container.children[i]
-        //c.alpha = 0
+
         c.laser++
-         if (c.laser < 50) {
-            c.laser++
-        } 
-   
     }
 
     let laserPointers = []
@@ -65,10 +61,6 @@
     {
 
         var dtf = time.deltaMS / (1000.0/60.0)
-
-        laserPointers.forEach(l => {
-            laserSpottedOn(l.x,l.y)
-        })
 
         container.children.forEach(c => {
             if (c.laser > 0 && c.laser < 100) {
@@ -106,6 +98,10 @@
                 c.angle = 0
             } 
 
+        })
+        
+        laserPointers.forEach(l => {
+            laserSpottedOn(l.x,l.y)
         })
     });
 })();
