@@ -70,8 +70,9 @@
         let y = Math.floor((pixelY-container.y) / h) % yCount
         let i = Math.floor(xCount*y + x)
         let c = container.children[i]
-
-        c.laser++
+        if  (c) {
+            c.laser++
+        }
     }
 
     let laserPointers = []
