@@ -21,6 +21,9 @@ Build blocks by pointing at them. Wait some seconds and it materializes. Wait so
 - Open `http://localhost:3333` in your webbrowser. If it says it is insecure due to http, open it in another browser or in private mode
 
 
+A block is active if .laser is >= 100 and < 200
+
+
 ## Resources
 
 <a href="https://github.com/alexanderthurn/blocklaser">Github Repository</>

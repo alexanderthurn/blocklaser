@@ -163,7 +163,7 @@
 
         container.children.forEach(c => {
             if (c.laser > 0 && c.laser < 100) {
-                c.laser -= 0.1*dtf
+                c.laser -= 0.2*dtf
                 if (c.laser > 50) {
                     c.laser -= 0.5*dtf
                 }
@@ -172,8 +172,12 @@
                 }
             }
 
-            if (c.laser > 150 && c.laser < 175) {
-                c.laser -= 0.1*dtf
+            if (c.laser > 100 && c.laser < 200) {
+                c.laser -= 0.2*dtf
+                if (c.laser > 150) {
+                    c.laser -= 0.5*dtf
+                }
+
                 if (c.laser < 100) {
                     c.laser = 100
                 }
@@ -187,7 +191,7 @@
                     c.deleteAction(c)
                 }
             } else if (c.laser >= 150) {
-                c.alpha = 1.0 - (c.laser-150) / 50
+                c.alpha = 1.0 - ((c.laser-150) / 50)*0.5
                 c.angle = -((c.laser-150)/50-1)*4+Math.random()*((c.laser-150)/50-1)*8
             } else if (c.laser >= 100) {
                 c.alpha = 1
