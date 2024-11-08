@@ -41,10 +41,16 @@
     document.body.appendChild(app.canvas);
     app.stage.addChild(container);
     app.stage.addChild(container2);
-    var laserSpottedOn = (pixelX,pixelY) => {
+    var laserSpottedOn = (pixelX,pixelY,dtf) => {
         let c = app.getBoxAtPixel(pixelX, pixelY)
         if (c) {
-            c.laser++
+            if (c.laser > 50 && c.laser < 100) {
+                c.laser+=1.5*dtf
+            } else if (c.laser > 150 && c.laser < 200) {
+                c.laser+=1.5*dtf
+            } else {
+                c.laser+=1*dtf
+            }
         }
     }
     let laserPointers = []
@@ -197,16 +203,16 @@
                 c.angle = 0
             } else if (c.laser >= 50) {
                c.alpha = c.laser / 100
-               c.angle = -(c.laser/50-1)*4+Math.random()*(c.laser/50-1)*8
+               c.angle = -(c.laser/75-1)*4+Math.random()*(c.laser/75-1)*8
             } else {
-                c.alpha = c.laser / 100
+                c.alpha = c.laser / 200
                 c.angle = 0
             } 
 
         })
         
         laserPointers.forEach(l => {
-            laserSpottedOn(l.x,l.y)
+            laserSpottedOn(l.x,l.y, dtf)
         })
 
         
