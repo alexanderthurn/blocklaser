@@ -2,6 +2,16 @@
 var PHYS = {}
 
 
+PHYS.createStaticBoxBody = (x,y,w,h, world) => {
+    var boxBody = new p2.Body({
+        mass: 0,
+        position: [x,y]
+    })
+    var boxShape = new p2.Box({ width: w, height: h })
+    boxBody.addShape(boxShape)
+    world.addBody(boxBody)
+    return boxBody
+}
 
 PHYS.init = (boxContainer, freeContainer) => {
 
@@ -14,9 +24,9 @@ PHYS.init = (boxContainer, freeContainer) => {
     // Create an empty dynamic body
     var circleBody = new p2.Body({
         mass: 5,
-        position: [100, 100]
+        position: [500, 100]
     });
-    var circleShape = new p2.Circle({ radius: 20 });
+    var circleShape = new p2.Circle({ radius: 50 });
     circleBody.addShape(circleShape);
     world.addBody(circleBody);
     var circlePIXI = new PIXI.Graphics(circleBody.position[0], circleBody.position[1]).circle(0,0, circleShape.radius).fill('white')
@@ -25,23 +35,23 @@ PHYS.init = (boxContainer, freeContainer) => {
 
     var boxBody = new p2.Body({
         mass: 0,
-        position: [0,500]
+        position: [500,500]
     })
     var boxShape = new p2.Box({ width: 1000, height: 10 })
     boxBody.addShape(boxShape)
     world.addBody(boxBody)
-    var boxPIXI = new PIXI.Graphics(boxBody.position[0], boxBody.position[1]).rect(0,0, boxShape.width, boxShape.height).fill('green')
+    var boxPIXI = new PIXI.Graphics(boxBody.position[0], boxBody.position[1]).rect(-boxShape.width/2, -boxShape.height/2, boxShape.width, boxShape.height).fill('green')
     boxPIXI.body = boxBody
     freeContainer.addChild(boxPIXI)
 
     var boxBody2 = new p2.Body({
         mass: 5,
-        position: [200,100]
+        position: [210,110]
     })
-    var boxShape2 = new p2.Box({ width: 30, height: 30 })
+    var boxShape2 = new p2.Box({ width: 150, height: 150 })
     boxBody2.addShape(boxShape2)
     world.addBody(boxBody2)
-    var boxPIXI2 = new PIXI.Graphics(boxBody2.position[0], boxBody2.position[1]).rect(0,0, boxShape2.width, boxShape2.height).fill('white')
+    var boxPIXI2 = new PIXI.Graphics(boxBody2.position[0], boxBody2.position[1]).rect(-boxShape2.width/2, -boxShape2.height/2, boxShape2.width, boxShape2.height).fill('white')
     boxPIXI2.body = boxBody2
     freeContainer.addChild(boxPIXI2)
 
