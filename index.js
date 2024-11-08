@@ -7,6 +7,8 @@
     const app = new PIXI.Application();
     let container = new PIXI.Container()
     let container2 = new PIXI.Container()
+    container.x = container2.x = 10
+    container.y = container2.y = 10
     app.BOX_WIDTH = 50
     app.BOX_HEIGHT = 50
     app.BOX_COUNT_X = 0
@@ -16,6 +18,7 @@
 
     app.getBoxAtTileXY = (tileX,tileY) => {
         let i = Math.floor(app.BOX_COUNT_X*tileY + tileX)
+        console.log(tileX,  tileY, i, app.BOX_COUNT_X, app.BOX_COUNT_Y, app.renderer.width, app.renderer.height)
         if (i >= 0 && i < container.children.length)
             return container.children[i] 
         else 
@@ -36,13 +39,6 @@
 
     // Append the application canvas to the document body
     document.body.appendChild(app.canvas);
-
-
-
-    container.x = container2.x = 10
-    container.y = container2.y = 10
-    container.width = container2.width = app.screen.width-20
-    container.height = container2.height = app.screen.height-20
     app.stage.addChild(container);
     app.stage.addChild(container2);
     var laserSpottedOn = (pixelX,pixelY) => {
@@ -62,6 +58,15 @@
         event.stopPropagation();
     }, false);
 
+
+    let resize = () => {
+        clearAll(null)
+    }
+
+    app.renderer.on('resize', function(event){
+        console.log(event, app.renderer.width, app.renderer.height)
+        resize()
+    });
 
     let startMODEmpty = (c) => {
         app.MOD = MOD_EMPTY
@@ -91,8 +96,8 @@
     function baseInit(container, container2, app, laserPointers) {
         let w = app.BOX_WIDTH
         let h = app.BOX_HEIGHT
-        app.BOX_COUNT_X = Math.ceil((app.screen.width-20) / w)
-        app.BOX_COUNT_Y = Math.ceil((app.screen.height-20) / h)
+        app.BOX_COUNT_X = Math.ceil((app.renderer.width-20) / w)
+        app.BOX_COUNT_Y = Math.ceil((app.renderer.height-20) / h)
         for (let y = 0; y < app.BOX_COUNT_Y; y++) {
              for (let x = 0; x < app.BOX_COUNT_X; x++) {
                 let c = new PIXI.Graphics()
@@ -138,8 +143,7 @@
         }
     }
    
-  
-    clearAll(null)
+    resize()
 
     app.ticker.add((time) =>
     {
