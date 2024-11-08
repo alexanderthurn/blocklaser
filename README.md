@@ -8,7 +8,10 @@ __A simple block based application to demonstrate laser building stuff__
 
 ## Game Description
 
-Build blocks by pointing on them. Wait some seconds and it materializes. I
+Build blocks by pointing at them. Wait some seconds and it materializes. Wait some more seconds and it will dissapear again. 
+
+* Key 1-9: Start Mod
+* Key 0: Deactivate/Activate Mod Buttons
 
 
 ## Development

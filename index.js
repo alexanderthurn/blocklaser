@@ -14,11 +14,11 @@
     app.BOX_COUNT_X = 0
     app.BOX_COUNT_Y = 0
     app.MOD = MOD_PHYS
+    app.MOD_BUTTONS_ACTIVATED = true
 
 
     app.getBoxAtTileXY = (tileX,tileY) => {
         let i = Math.floor(app.BOX_COUNT_X*tileY + tileX)
-        console.log(tileX,  tileY, i, app.BOX_COUNT_X, app.BOX_COUNT_Y, app.renderer.width, app.renderer.height)
         if (i >= 0 && i < container.children.length)
             return container.children[i] 
         else 
@@ -59,13 +59,8 @@
     }, false);
 
 
-    let resize = () => {
-        clearAll(null)
-    }
-
     app.renderer.on('resize', function(event){
-        console.log(event, app.renderer.width, app.renderer.height)
-        resize()
+        clearAll(null)
     });
 
     let startMODEmpty = (c) => {
@@ -77,6 +72,22 @@
         app.MOD = MOD_PHYS
         clearAll(c)
     }
+
+
+    window.addEventListener('keyup', event => {
+        if (event.key === '0') {
+            app.MOD_BUTTONS_ACTIVATED = !app.MOD_BUTTONS_ACTIVATED
+            app.getBoxAtTileXY(0,0).laser = app.getBoxAtTileXY(0,2).laser =  app.MOD_BUTTONS_ACTIVATED ? 100 : 50
+        }
+        if (event.key === '1') {
+            startMODEmpty()
+        }
+
+        if (event.key === '2') {
+            startMODPhysics()
+        }
+    });
+
 
     let clearAll = (c) => {
         while(container.children[0]) { 
@@ -143,7 +154,7 @@
         }
     }
    
-    resize()
+    clearAll(null)
 
     app.ticker.add((time) =>
     {
@@ -172,7 +183,7 @@
             if (c.laser >= 200) {
                 c.laser = -50
                 c.angle = 0
-                if (c.deleteAction) {
+                if (c.deleteAction && app.MOD_BUTTONS_ACTIVATED) {
                     c.deleteAction(c)
                 }
             } else if (c.laser >= 150) {
