@@ -19,8 +19,10 @@
     let yCount = Math.ceil((app.screen.height-20) / h)
     let container = new PIXI.Container()
     let container2 = new PIXI.Container()
-    container.x = 10
-    container.y = 10
+    container.x = container2.x = 10
+    container.y = container2.y = 10
+    container.width = container2.width = app.screen.width-20
+    container.height = container2.height = app.screen.height-20
     
     let clearAll = (c) => {
         container.children.forEach(c => { c.laser = 0})
@@ -64,15 +66,12 @@
         }
     }
   
-
-   
     app.stage.addChild(container);
     app.stage.addChild(container2);
 
-    
 
-    var gameMode = PHYS
-    gameMode.init(container, container2)
+    var gameMode = MOD_PHYS
+    gameMode.init(container, container2, app)
 
     var laserSpottedOn = (pixelX,pixelY) => {
         let x = Math.floor((pixelX-container.x)/ w) % xCount
