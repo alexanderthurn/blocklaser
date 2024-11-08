@@ -76,6 +76,22 @@ const fixedTimeStep = 1 / 60; // seconds
 const maxSubSteps = 10;
 MOD_PHYS.update = (dt) => {
     MOD_PHYS.world && MOD_PHYS.world.step(fixedTimeStep, dt, maxSubSteps);
+
+    MOD_PHYS.boxContainer && MOD_PHYS.boxContainer.children.forEach(p => {
+    
+        if (p.laser >= 100 && p.laser < 200) {
+            if (!p.body) {
+                p.body = MOD_PHYS.createPhysicalBoxBody(p.x,p.y,MOD_PHYS.app.BOX_WIDTH, MOD_PHYS.app.BOX_HEIGHT, 0)
+                MOD_PHYS.world.addBody(p.body)
+            }
+        } else {
+            if (p.body) {
+                MOD_PHYS.world.removeBody(p.body)
+                delete p.body
+            }
+        }
+
+    })
     MOD_PHYS.freeContainer && MOD_PHYS.freeContainer.children.forEach(p => {
         p.x = p.body.interpolatedPosition[0]
         p.y = p.body.interpolatedPosition[1]

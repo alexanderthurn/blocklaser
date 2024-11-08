@@ -47,7 +47,6 @@
     app.stage.addChild(container2);
     var laserSpottedOn = (pixelX,pixelY) => {
         let c = app.getBoxAtPixel(pixelX, pixelY)
-        console.log(c)
         if (c) {
             c.laser++
         }
@@ -140,7 +139,7 @@
     }
    
   
-    startMODEmpty(null)
+    clearAll(null)
 
     app.ticker.add((time) =>
     {
