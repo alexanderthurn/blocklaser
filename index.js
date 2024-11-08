@@ -1,8 +1,14 @@
+
+
 (async () =>
 {
+    var BOX_WIDTH = 50
+    var BOX_HEIGHT = 50
+    var boxCountX = 0
+    var boxCountY = 0
+
     // Create a new application
     const app = new PIXI.Application();
-
     // Initialize the application
     await app.init({
         resizeTo: window,
@@ -11,19 +17,39 @@
 
     // Append the application canvas to the document body
     document.body.appendChild(app.canvas);
-
-
-    let w = 50
-    let h = 50
-    let xCount = Math.ceil((app.screen.width-20) / w)
-    let yCount = Math.ceil((app.screen.height-20) / h)
+    var gameMode = MOD_PHYS
+    
     let container = new PIXI.Container()
     let container2 = new PIXI.Container()
+
     container.x = container2.x = 10
     container.y = container2.y = 10
     container.width = container2.width = app.screen.width-20
     container.height = container2.height = app.screen.height-20
-    
+    app.stage.addChild(container);
+    app.stage.addChild(container2);
+    var laserSpottedOn = (pixelX,pixelY) => {
+        let x = Math.floor((pixelX-container.x)/ BOX_WIDTH) % boxCountX
+        let y = Math.floor((pixelY-container.y) / BOX_HEIGHT) % boxCountY
+        let i = Math.floor(boxCountX*y + x)
+        let c = container.children[i]
+        if  (c) {
+            c.laser++
+        }
+    }
+    let laserPointers = []
+    document.body.addEventListener('pointermove', event => {
+        if (laserPointers.length === 0) {
+            laserPointers.push({x: 0,y:0})
+        }
+        laserPointers[0].x = event.clientX
+        laserPointers[0].y = event.clientY
+        event.preventDefault();
+        event.stopPropagation();
+    }, false);
+
+
+
     let clearAll = (c) => {
         container.children.forEach(c => { c.laser = 0})
         while(container2.children[0]) { 
@@ -34,66 +60,50 @@
     }
 
 
-    for (let y = 0; y < yCount; y++) {
-         for (let x = 0; x < xCount; x++) {
-            let c = new PIXI.Graphics()
-            .rect(-w/2,-h/2, w,h)
-            .stroke('white')
-            c.laser = 0
-           
-            if (x === 0 && y === 0 ){
-                c = new PIXI.Graphics()
+    function baseInit(container, container2, app) {
+        let w = BOX_WIDTH
+        let h = BOX_HEIGHT
+        let xCount = boxCountX = Math.ceil((app.screen.width-20) / w)
+        let yCount = boxCountY = Math.ceil((app.screen.height-20) / h)
+        for (let y = 0; y < yCount; y++) {
+             for (let x = 0; x < xCount; x++) {
+                let c = new PIXI.Graphics()
                 .rect(-w/2,-h/2, w,h)
                 .stroke('white')
-                .moveTo(-w/2,-h/2)
-                .lineTo(w/2,h/2)
-                .moveTo(-w/2,h/2)
-                .lineTo(w/2,-h/2)
-                .stroke('white')
-                c.deleteAction = clearAll
-                c.laser = 100
+                c.laser = 0
+               
+                if (x === 0 && y === 0 ){
+                    c = new PIXI.Graphics()
+                    .rect(-w/2,-h/2, w,h)
+                    .stroke('white')
+                    .moveTo(-w/2,-h/2)
+                    .lineTo(w/2,h/2)
+                    .moveTo(-w/2,h/2)
+                    .lineTo(w/2,-h/2)
+                    .stroke('white')
+                    c.deleteAction = clearAll
+                    c.laser = 100
+                }
+    
+                if ((x === 4 && y === 5) || (x === 5 && y === 4) || (x === 6 && y === 5)) {
+                    c.laser = 100
+                }
+                c.x = w*x + w/2
+                c.y = h*y+ h/2
+                c.alpha = 0
+                c.rotation = 0
+    
+                container.addChild(c)
             }
-
-            if ((x === 4 && y === 5) || (x === 5 && y === 4) || (x === 6 && y === 5)) {
-                c.laser = 100
-            }
-            c.x = w*x + w/2
-            c.y = h*y+ h/2
-            c.alpha = 0
-            c.rotation = 0
-
-            container.addChild(c)
         }
     }
+   
   
-    app.stage.addChild(container);
-    app.stage.addChild(container2);
 
-
-    var gameMode = MOD_PHYS
+    baseInit(container, container2, app)
     gameMode.init(container, container2, app)
 
-    var laserSpottedOn = (pixelX,pixelY) => {
-        let x = Math.floor((pixelX-container.x)/ w) % xCount
-        let y = Math.floor((pixelY-container.y) / h) % yCount
-        let i = Math.floor(xCount*y + x)
-        let c = container.children[i]
-        if  (c) {
-            c.laser++
-        }
-    }
-
-    let laserPointers = []
-
-    document.body.addEventListener('pointermove', event => {
-        if (laserPointers.length === 0) {
-            laserPointers.push({x: 0,y:0})
-        }
-        laserPointers[0].x = event.clientX
-        laserPointers[0].y = event.clientY
-        event.preventDefault();
-        event.stopPropagation();
-    }, false);
+   
 
     app.ticker.add((time) =>
     {
