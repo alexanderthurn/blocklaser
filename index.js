@@ -2,13 +2,32 @@
 
 (async () =>
 {
-    var BOX_WIDTH = 50
-    var BOX_HEIGHT = 50
-    var boxCountX = 0
-    var boxCountY = 0
 
     // Create a new application
     const app = new PIXI.Application();
+    let container = new PIXI.Container()
+    let container2 = new PIXI.Container()
+    app.BOX_WIDTH = 50
+    app.BOX_HEIGHT = 50
+    app.BOX_COUNT_X = 0
+    app.BOX_COUNT_Y = 0
+    app.MOD = MOD_PHYS
+
+
+    app.getBoxAtTileXY = (tileX,tileY) => {
+        let i = Math.floor(app.BOX_COUNT_X*tileY + tileX)
+        if (i >= 0 && i < container.children.length)
+            return container.children[i] 
+        else 
+            return null
+    }
+
+    app.getBoxAtPixel = (pixelX,pixelY) => {
+        let tileX = Math.floor((pixelX-container.x)/ app.BOX_WIDTH) % app.BOX_COUNT_X
+        let tileY = Math.floor((pixelY-container.y) / app.BOX_HEIGHT) % app.BOX_COUNT_Y
+        return app.getBoxAtTileXY(tileX, tileY)
+    }
+
     // Initialize the application
     await app.init({
         resizeTo: window,
@@ -17,10 +36,8 @@
 
     // Append the application canvas to the document body
     document.body.appendChild(app.canvas);
-    var gameMode = MOD_PHYS
-    
-    let container = new PIXI.Container()
-    let container2 = new PIXI.Container()
+
+
 
     container.x = container2.x = 10
     container.y = container2.y = 10
@@ -29,11 +46,9 @@
     app.stage.addChild(container);
     app.stage.addChild(container2);
     var laserSpottedOn = (pixelX,pixelY) => {
-        let x = Math.floor((pixelX-container.x)/ BOX_WIDTH) % boxCountX
-        let y = Math.floor((pixelY-container.y) / BOX_HEIGHT) % boxCountY
-        let i = Math.floor(boxCountX*y + x)
-        let c = container.children[i]
-        if  (c) {
+        let c = app.getBoxAtPixel(pixelX, pixelY)
+        console.log(c)
+        if (c) {
             c.laser++
         }
     }
@@ -49,29 +64,44 @@
     }, false);
 
 
+    let startMODEmpty = (c) => {
+        app.MOD = MOD_EMPTY
+        clearAll(c)
+    }
+
+    let startMODPhysics = (c) => {
+        app.MOD = MOD_PHYS
+        clearAll(c)
+    }
 
     let clearAll = (c) => {
-        container.children.forEach(c => { c.laser = 0})
+        while(container.children[0]) { 
+            container.removeChild(container.children[0]);
+        }
         while(container2.children[0]) { 
             container2.removeChild(container2.children[0]);
         }
-        gameMode.init(container, container2)
-        c.laser = 100
+
+        baseInit(container, container2, app, laserPointers)
+        app.MOD.init(container, container2, app, laserPointers)
+
+        if (c)
+            c.laser = 100
     }
 
-
-    function baseInit(container, container2, app) {
-        let w = BOX_WIDTH
-        let h = BOX_HEIGHT
-        let xCount = boxCountX = Math.ceil((app.screen.width-20) / w)
-        let yCount = boxCountY = Math.ceil((app.screen.height-20) / h)
-        for (let y = 0; y < yCount; y++) {
-             for (let x = 0; x < xCount; x++) {
+    function baseInit(container, container2, app, laserPointers) {
+        let w = app.BOX_WIDTH
+        let h = app.BOX_HEIGHT
+        app.BOX_COUNT_X = Math.ceil((app.screen.width-20) / w)
+        app.BOX_COUNT_Y = Math.ceil((app.screen.height-20) / h)
+        for (let y = 0; y < app.BOX_COUNT_Y; y++) {
+             for (let x = 0; x < app.BOX_COUNT_X; x++) {
                 let c = new PIXI.Graphics()
                 .rect(-w/2,-h/2, w,h)
                 .stroke('white')
                 c.laser = 0
                
+                // mod empty
                 if (x === 0 && y === 0 ){
                     c = new PIXI.Graphics()
                     .rect(-w/2,-h/2, w,h)
@@ -81,13 +111,24 @@
                     .moveTo(-w/2,h/2)
                     .lineTo(w/2,-h/2)
                     .stroke('white')
-                    c.deleteAction = clearAll
+                    c.deleteAction = startMODEmpty
                     c.laser = 100
                 }
-    
-                if ((x === 4 && y === 5) || (x === 5 && y === 4) || (x === 6 && y === 5)) {
+
+                 // mod phys
+                 if (x === 0 && y === 2 ){
+                    c = new PIXI.Graphics()
+                    .rect(-w/2,-h/2, w,h)
+                    .stroke('white')
+                    .moveTo(0,0)
+                    .lineTo(w/2,h/2)
+                    .moveTo(0,0)
+                    .lineTo(w/2,-h/2)
+                    .stroke('white')
+                    c.deleteAction = startMODPhysics
                     c.laser = 100
                 }
+
                 c.x = w*x + w/2
                 c.y = h*y+ h/2
                 c.alpha = 0
@@ -99,11 +140,7 @@
     }
    
   
-
-    baseInit(container, container2, app)
-    gameMode.init(container, container2, app)
-
-   
+    startMODEmpty(null)
 
     app.ticker.add((time) =>
     {
@@ -156,6 +193,6 @@
         })
 
         
-        gameMode.update(time.deltaMS, container, laserPointers)
+        app.MOD.update(time.deltaMS, container, laserPointers)
     });
 })();
