@@ -77,7 +77,7 @@
     window.addEventListener('keyup', event => {
         if (event.key === '0') {
             app.MOD_BUTTONS_ACTIVATED = !app.MOD_BUTTONS_ACTIVATED
-            app.getBoxAtTileXY(0,0).laser = app.getBoxAtTileXY(0,2).laser =  app.MOD_BUTTONS_ACTIVATED ? 100 : 50
+            app.getBoxAtTileXY(0,0).laser = app.getBoxAtTileXY(0,2).laser = app.MOD_BUTTONS_ACTIVATED ? 100 : 50
         }
         if (event.key === '1') {
             startMODEmpty()
@@ -101,7 +101,7 @@
         app.MOD.init(container, container2, app, laserPointers)
 
         if (c)
-            c.laser = 100
+            c.laser = app.MOD_BUTTONS_ACTIVATED ? 100 : 50
     }
 
     function baseInit(container, container2, app, laserPointers) {
@@ -127,7 +127,6 @@
                     .lineTo(w/2,-h/2)
                     .stroke('white')
                     c.deleteAction = startMODEmpty
-                    c.laser = 100
                 }
 
                  // mod phys
@@ -141,7 +140,6 @@
                     .lineTo(w/2,-h/2)
                     .stroke('white')
                     c.deleteAction = startMODPhysics
-                    c.laser = 100
                 }
 
                 c.x = w*x + w/2
@@ -152,6 +150,7 @@
                 container.addChild(c)
             }
         }
+        app.getBoxAtTileXY(0,0).laser = app.getBoxAtTileXY(0,2).laser = app.MOD_BUTTONS_ACTIVATED ? 100 : 50
     }
    
     clearAll(null)
