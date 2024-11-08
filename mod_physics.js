@@ -42,6 +42,29 @@ MOD_PHYS.createPhysicalCirclePIXI = (x,y,r,m) => {
     return pixi
 }
 
+MOD_PHYS.getCurrentBodyAsReset = (body) => {
+    return {
+        position: [body.position[0], body.position[1]], 
+        angle: body.angle, 
+        angularVelocity: 0, 
+        velocity: [body.velocity[0], body.velocity[1]],
+        inertia: body.intertia,
+        damping: body.damping
+    }
+}
+
+MOD_PHYS.applyResetOnBody = (body, reset) => {
+    body.angle = reset.angle
+    body.position[0] = reset.position[0]
+    body.position[1] = reset.position[1]
+    body.velocity[0] = reset.velocity[0]
+    body.velocity[1] = reset.velocity[1]
+    body.angularVelocity = reset.angularVelocity
+    body.setZeroForce ()
+    body.intertia = reset.inertia
+    body.damping = reset.damping
+}
+
 MOD_PHYS.init = (boxContainer, freeContainer, app) => {
 
     // Create a physics world, where bodies and constraints live
@@ -52,6 +75,7 @@ MOD_PHYS.init = (boxContainer, freeContainer, app) => {
  
     // Create an empty dynamic body
     var circle = MOD_PHYS.createPhysicalCirclePIXI(500,100,100,5)
+    circle.reset = MOD_PHYS.getCurrentBodyAsReset(circle.body)
     world.addBody(circle.body)
     freeContainer.addChild(circle)
 
@@ -59,12 +83,13 @@ MOD_PHYS.init = (boxContainer, freeContainer, app) => {
     ground.body.angle = deg2rad(25)
     world.addBody(ground.body)
     freeContainer.addChild(ground)
-*/
+
 
     var cube = MOD_PHYS.createPhyiscalBoxPIXI(210,110,150,150,5)
+    cube.reset = MOD_PHYS.getCurrentBodyAsReset(cube.body)
     world.addBody(cube.body)
     freeContainer.addChild(cube)
-
+*/
 
     MOD_PHYS.world = world
     MOD_PHYS.boxContainer = boxContainer
@@ -97,7 +122,11 @@ MOD_PHYS.update = (dt) => {
         p.y = p.body.interpolatedPosition[1]
         p.rotation = p.body.angle
         if (p.body.position[1] > MOD_PHYS.app.renderer.height + p.body.boundingRadius) {
-            p.body.position[1] = -p.body.boundingRadius
+            if (p.reset) {
+               MOD_PHYS.applyResetOnBody(p.body, p.reset)
+            } else {
+                p.body.position[1] = -p.body.boundingRadius
+            }
         }
         if (p.body.position[0] < 0) {
             p.body.position[0] = MOD_PHYS.app.renderer.width
@@ -105,5 +134,7 @@ MOD_PHYS.update = (dt) => {
         if (p.body.position[0] > MOD_PHYS.app.renderer.width) {
             p.body.position[0] = 0
         }
+
+        console.log(p.body.position[1],p.body.velocity[1], p.reset.velocity)
     })
 }
