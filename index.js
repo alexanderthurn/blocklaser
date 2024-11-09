@@ -44,7 +44,9 @@
     var laserSpottedOn = (pixelX,pixelY,dtf) => {
         let c = app.getBoxAtPixel(pixelX, pixelY)
         if (c) {
-            if (c.laser > 50 && c.laser < 100) {
+            if (c.laser >= 0 && c.laser < 40) {
+                c.laser = 40
+            } if (c.laser > 50 && c.laser < 100) {
                 c.laser+=1.5*dtf
             } else if (c.laser > 150 && c.laser < 200) {
                 c.laser+=1.5*dtf
@@ -202,7 +204,7 @@
                 c.alpha = 1
                 c.angle = 0
             } else if (c.laser >= 50) {
-               c.alpha = c.laser / 100
+               c.alpha = c.laser / 150
                c.angle = -(c.laser/75-1)*4+Math.random()*(c.laser/75-1)*8
             } else {
                 c.alpha = c.laser / 200
