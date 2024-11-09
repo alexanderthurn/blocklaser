@@ -4,7 +4,7 @@ var MOD_EMPTY = {
 }
 
 
-MOD_EMPTY.init = (boxContainer, freeContainer, app, laserPointers) => {
+MOD_EMPTY.init = (app) => {
 
     for (let y = 0; y < app.BOX_COUNT_Y; y++) {
         for (let x = 0; x < app.BOX_COUNT_X; x++) {
