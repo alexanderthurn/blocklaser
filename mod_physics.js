@@ -90,7 +90,7 @@ MOD_PHYS.init = (boxContainer, freeContainer, app) => {
     freeContainer.addChild(ground)
 
  
-    var cube = MOD_PHYS.createPhyiscalBoxPIXI(210,110,150,150,5)
+    var cube = MOD_PHYS.createPhyiscalBoxPIXI(210,110,150,150,10)
     //cube.reset = MOD_PHYS.getCurrentBodyAsReset(cube.body)
     world.addBody(cube.body)
     freeContainer.addChild(cube)
