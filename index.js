@@ -25,6 +25,14 @@
             return null
     }
 
+    app.replaceBoxAtTileXY = (tileX, tileY, box) => {
+        let i = Math.floor(app.BOX_COUNT_X*tileY + tileX)
+        if (i >= 0 && i < container.children.length) {
+            container.addChildAt(box, i)
+            container.removeChildAt(i+1)
+        }
+    }
+
     app.getBoxAtPixel = (pixelX,pixelY) => {
         let tileX = Math.floor((pixelX-container.x)/ app.BOX_WIDTH) % app.BOX_COUNT_X
         let tileY = Math.floor((pixelY-container.y) / app.BOX_HEIGHT) % app.BOX_COUNT_Y

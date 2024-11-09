@@ -71,11 +71,67 @@ MOD_PHYS.applyResetOnBody = (body, reset) => {
 
 MOD_PHYS.init = (boxContainer, freeContainer, app) => {
 
+
+    for (let y = 0; y < app.BOX_COUNT_Y; y++) {
+        for (let x = 0; x < app.BOX_COUNT_X; x++) {
+            let c = app.getBoxAtTileXY(x,y)
+            if ((x === 22 && y === 15)) {
+                let c = new PIXI.Graphics()
+                .rect(-app.BOX_WIDTH/2,-app.BOX_HEIGHT/2, app.BOX_WIDTH,app.BOX_HEIGHT)
+                .stroke('yellow')
+                .moveTo(-app.BOX_WIDTH/2*0.75, app.BOX_HEIGHT/2*0.75)
+                .lineTo(0,-app.BOX_HEIGHT/2*0.75)
+                .lineTo(app.BOX_WIDTH/2*0.75,app.BOX_HEIGHT/2*0.75)
+                .lineTo(-app.BOX_WIDTH/2*0.75, app.BOX_HEIGHT/2*0.75)
+                .stroke('yellow')
+                c.x = app.BOX_WIDTH*x + app.BOX_WIDTH/2
+                c.y = app.BOX_HEIGHT*y+ app.BOX_HEIGHT/2
+                c.alpha = 0
+                c.rotation = 0
+                c.laser = 100
+                c.impulse = [0,-2000]
+                app.replaceBoxAtTileXY(x,y,c)
+            }
+
+            if ((x === 22 && y === 5)) {
+                let c = new PIXI.Graphics()
+                .rect(-app.BOX_WIDTH/2,-app.BOX_HEIGHT/2, app.BOX_WIDTH,app.BOX_HEIGHT)
+                .stroke('yellow')
+                .moveTo(app.BOX_WIDTH/2*0.75, -app.BOX_HEIGHT/2*0.75)
+                .lineTo(-app.BOX_WIDTH/2*0.75,0)
+                .lineTo(app.BOX_WIDTH/2*0.75,app.BOX_HEIGHT/2*0.75)
+                .lineTo(app.BOX_WIDTH/2*0.75, -app.BOX_HEIGHT/2*0.75)
+                .stroke('yellow')
+                c.x = app.BOX_WIDTH*x + app.BOX_WIDTH/2
+                c.y = app.BOX_HEIGHT*y+ app.BOX_HEIGHT/2
+                c.alpha = 0
+                c.laser = 100
+                c.impulse = [-2000,0]
+                app.replaceBoxAtTileXY(x,y,c)
+            }
+
+
+        }
+    }
+
     // Create a physics world, where bodies and constraints live
     var world = new p2.World({
         gravity:[0, 9.82*MOD_PHYS.scale]
     });
+        world.on("beginContact",function(event){
+            if (event.bodyA.impulse) {
+                event.bodyB.applyImpulse([event.bodyA.impulse[0]*event.bodyB.mass, event.bodyA.impulse[1]*event.bodyB.mass]);
+            }
 
+            if (event.bodyB.impulse) {
+                event.bodyA.applyImpulse([event.bodyB.impulse[0]*event.bodyA.mass, event.bodyB.impulse[1]*event.bodyA.mass]);
+            }
+      });
+
+      /*
+      world.on("endContact",function(event){
+        console.log(event)
+      });*/
  
     // Create an empty dynamic body
     var circle = MOD_PHYS.createPhysicalCirclePIXI(500,100,100,5)
@@ -114,6 +170,8 @@ MOD_PHYS.update = (dt) => {
         if (p.laser >= 100 && p.laser < 200) {
             if (!p.body && p.physics !== null) {
                 p.body = MOD_PHYS.createPhysicalBoxBody(p.x,p.y,MOD_PHYS.app.BOX_WIDTH, MOD_PHYS.app.BOX_HEIGHT, 0)
+                if (p.impulse)
+                    p.body.impulse = p.impulse
                 MOD_PHYS.world.addBody(p.body)
             }
         } else {
