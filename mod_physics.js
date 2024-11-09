@@ -76,7 +76,7 @@ MOD_PHYS.init = (boxContainer, freeContainer, app) => {
 
  
     // Create an empty dynamic body
-    var circle = MOD_PHYS.createPhysicalCirclePIXI(app.renderer.width*0.3,100,100,5)
+    var circle = MOD_PHYS.createPhysicalCirclePIXI(500,100,100,5)
     circle.reset = MOD_PHYS.getCurrentBodyAsReset(circle.body)
     world.addBody(circle.body)
     freeContainer.addChild(circle)
