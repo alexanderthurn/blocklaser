@@ -78,7 +78,7 @@ MOD_PHYS.init = (app) => {
         for (let x = 0; x < app.BOX_COUNT_X; x++) {
             let c = app.getBoxAtTileXY(x,y)
             if ((x === 22 && y === 15)) {
-                let c = new PIXI.Graphics()
+                c.shape
                 .rect(-app.BOX_WIDTH/2,-app.BOX_HEIGHT/2, app.BOX_WIDTH,app.BOX_HEIGHT)
                 .stroke('yellow')
                 .moveTo(-app.BOX_WIDTH/2*0.75, app.BOX_HEIGHT/2*0.75)
@@ -86,17 +86,14 @@ MOD_PHYS.init = (app) => {
                 .lineTo(app.BOX_WIDTH/2*0.75,app.BOX_HEIGHT/2*0.75)
                 .lineTo(-app.BOX_WIDTH/2*0.75, app.BOX_HEIGHT/2*0.75)
                 .stroke('yellow')
-                c.x = app.BOX_WIDTH*x + app.BOX_WIDTH/2
-                c.y = app.BOX_HEIGHT*y+ app.BOX_HEIGHT/2
                 c.alpha = 0
                 c.rotation = 0
                 c.laser = 100
                 c.impulse = [0,-2000]
-                app.replaceBoxAtTileXY(x,y,c)
             }
 
             if ((x === 22 && y === 5)) {
-                let c = new PIXI.Graphics()
+                c.shape
                 .rect(-app.BOX_WIDTH/2,-app.BOX_HEIGHT/2, app.BOX_WIDTH,app.BOX_HEIGHT)
                 .stroke('yellow')
                 .moveTo(app.BOX_WIDTH/2*0.75, -app.BOX_HEIGHT/2*0.75)
@@ -104,12 +101,9 @@ MOD_PHYS.init = (app) => {
                 .lineTo(app.BOX_WIDTH/2*0.75,app.BOX_HEIGHT/2*0.75)
                 .lineTo(app.BOX_WIDTH/2*0.75, -app.BOX_HEIGHT/2*0.75)
                 .stroke('yellow')
-                c.x = app.BOX_WIDTH*x + app.BOX_WIDTH/2
-                c.y = app.BOX_HEIGHT*y+ app.BOX_HEIGHT/2
                 c.alpha = 0
                 c.laser = 100
                 c.impulse = [-2000,0]
-                app.replaceBoxAtTileXY(x,y,c)
             }
 
 

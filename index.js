@@ -126,14 +126,15 @@
         app.BOX_COUNT_Y = Math.ceil((app.renderer.height-20) / h)
         for (let y = 0; y < app.BOX_COUNT_Y; y++) {
              for (let x = 0; x < app.BOX_COUNT_X; x++) {
-                let c = new PIXI.Graphics()
+                let c = new PIXI.Container()
+                c.shape = new PIXI.Graphics()
                 .rect(-w/2,-h/2, w,h)
                 .stroke('white')
                 c.laser = 0
                
                 // mod empty
                 if (x === 0 && y === 0 ){
-                    c = new PIXI.Graphics()
+                    c.shape = new PIXI.Graphics()
                     .rect(-w/2,-h/2, w,h)
                     .stroke('white')
                     .moveTo(-w/2,-h/2)
@@ -147,7 +148,7 @@
 
                  // mod phys
                  if (x === 0 && y === 2 ){
-                    c = new PIXI.Graphics()
+                    c.shape = new PIXI.Graphics()
                     .rect(-w/2,-h/2, w,h)
                     .stroke('white')
                     .moveTo(0,0)
@@ -163,7 +164,7 @@
                 c.y = h*y+ h/2
                 c.alpha = 0
                 c.rotation = 0
-    
+                c.addChild(c.shape)
                 app.container.addChild(c)
             }
         }
