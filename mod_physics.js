@@ -142,7 +142,7 @@ MOD_PHYS.init = (boxContainer, freeContainer, app) => {
 
    
 
-  var ground = MOD_PHYS.createPhyiscalBoxPIXI(500,600,500,10,0, {fill: 'transparent', stroke: 'white'})
+  var ground = MOD_PHYS.createPhyiscalBoxPIXI(500,600,500,25,0, {fill: 'transparent', stroke: 'white'})
     ground.body.angle = deg2rad(25)
     world.addBody(ground.body)
     freeContainer.addChild(ground)
