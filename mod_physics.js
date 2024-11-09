@@ -90,7 +90,7 @@ MOD_PHYS.init = (boxContainer, freeContainer, app) => {
     freeContainer.addChild(ground)
 
  
-    var cube = MOD_PHYS.createPhyiscalBoxPIXI(210,110,150,150,10)
+    var cube = MOD_PHYS.createPhyiscalBoxPIXI(210,110,150,150,10, {fill: 'transparent', stroke: 'white'})
     //cube.reset = MOD_PHYS.getCurrentBodyAsReset(cube.body)
     world.addBody(cube.body)
     freeContainer.addChild(cube)
@@ -126,17 +126,17 @@ MOD_PHYS.update = (dt) => {
         p.x = p.body.interpolatedPosition[0]
         p.y = p.body.interpolatedPosition[1]
         p.rotation = p.body.angle
-        if (p.body.position[1] > MOD_PHYS.app.renderer.height + p.body.boundingRadius +MOD_PHYS.offset) {
+        if (p.y > MOD_PHYS.app.renderer.height + p.body.boundingRadius +MOD_PHYS.offset) {
             if (p.reset) {
                MOD_PHYS.applyResetOnBody(p.body, p.reset)
             } else {
                 p.body.position[1] = -p.body.boundingRadius-2*MOD_PHYS.offset
             }
         }
-        if (p.body.position[0] < 0 -p.body.boundingRadius+MOD_PHYS.offset) {
+        if (p.x < 0 -p.body.boundingRadius+MOD_PHYS.offset) {
             p.body.position[0]+= MOD_PHYS.app.renderer.width+p.body.boundingRadius+2*MOD_PHYS.offset
         }
-        if (p.body.position[0] > MOD_PHYS.app.renderer.width +p.body.boundingRadius -MOD_PHYS.offset) {
+        if (p.x > MOD_PHYS.app.renderer.width +p.body.boundingRadius -MOD_PHYS.offset) {
             p.body.position[0] += -(MOD_PHYS.app.renderer.width+p.body.boundingRadius+2*MOD_PHYS.offset)
         }
     })
