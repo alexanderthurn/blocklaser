@@ -2,7 +2,9 @@
 var MOD_PHYS = {
     freeContainer: null,
     boxContainer: null,
-    app: null
+    app: null,
+    scale: 50,
+    offset: 0
 }
 const deg2rad = deg => deg * (Math.PI / 180);
 const rad2deg = rad => (rad * 180.0) / Math.PI;
@@ -69,27 +71,30 @@ MOD_PHYS.init = (boxContainer, freeContainer, app) => {
 
     // Create a physics world, where bodies and constraints live
     var world = new p2.World({
-        gravity:[0, 9.82]
+        gravity:[0, 9.82*MOD_PHYS.scale]
     });
 
  
     // Create an empty dynamic body
-    var circle = MOD_PHYS.createPhysicalCirclePIXI(500,100,100,5)
+    var circle = MOD_PHYS.createPhysicalCirclePIXI(app.renderer.width*0.3,100,100,5)
     circle.reset = MOD_PHYS.getCurrentBodyAsReset(circle.body)
     world.addBody(circle.body)
     freeContainer.addChild(circle)
 
- /*   var ground = MOD_PHYS.createPhyiscalBoxPIXI(500,600,500,10,0)
+
+   
+
+  var ground = MOD_PHYS.createPhyiscalBoxPIXI(500,600,500,10,0)
     ground.body.angle = deg2rad(25)
     world.addBody(ground.body)
     freeContainer.addChild(ground)
 
-
+ 
     var cube = MOD_PHYS.createPhyiscalBoxPIXI(210,110,150,150,5)
-    cube.reset = MOD_PHYS.getCurrentBodyAsReset(cube.body)
+    //cube.reset = MOD_PHYS.getCurrentBodyAsReset(cube.body)
     world.addBody(cube.body)
     freeContainer.addChild(cube)
-*/
+
 
     MOD_PHYS.world = world
     MOD_PHYS.boxContainer = boxContainer
@@ -97,15 +102,15 @@ MOD_PHYS.init = (boxContainer, freeContainer, app) => {
     MOD_PHYS.app = app
 }
 
-const fixedTimeStep = 1 / 60; // seconds
+const fixedTimeStep = 1 / 60.0; // seconds
 const maxSubSteps = 10;
 MOD_PHYS.update = (dt) => {
-    MOD_PHYS.world && MOD_PHYS.world.step(fixedTimeStep, dt, maxSubSteps);
+    MOD_PHYS.world && MOD_PHYS.world.step(fixedTimeStep, dt/1000, maxSubSteps);
 
     MOD_PHYS.boxContainer && MOD_PHYS.boxContainer.children.forEach(p => {
     
         if (p.laser >= 100 && p.laser < 200) {
-            if (!p.body) {
+            if (!p.body && p.physics !== null) {
                 p.body = MOD_PHYS.createPhysicalBoxBody(p.x,p.y,MOD_PHYS.app.BOX_WIDTH, MOD_PHYS.app.BOX_HEIGHT, 0)
                 MOD_PHYS.world.addBody(p.body)
             }
@@ -121,20 +126,18 @@ MOD_PHYS.update = (dt) => {
         p.x = p.body.interpolatedPosition[0]
         p.y = p.body.interpolatedPosition[1]
         p.rotation = p.body.angle
-        if (p.body.position[1] > MOD_PHYS.app.renderer.height + p.body.boundingRadius) {
+        if (p.body.position[1] > MOD_PHYS.app.renderer.height + p.body.boundingRadius +MOD_PHYS.offset) {
             if (p.reset) {
                MOD_PHYS.applyResetOnBody(p.body, p.reset)
             } else {
-                p.body.position[1] = -p.body.boundingRadius
+                p.body.position[1] = -p.body.boundingRadius-2*MOD_PHYS.offset
             }
         }
-        if (p.body.position[0] < 0) {
-            p.body.position[0] = MOD_PHYS.app.renderer.width
+        if (p.body.position[0] < 0 -p.body.boundingRadius+MOD_PHYS.offset) {
+            p.body.position[0]+= MOD_PHYS.app.renderer.width+p.body.boundingRadius+2*MOD_PHYS.offset
         }
-        if (p.body.position[0] > MOD_PHYS.app.renderer.width) {
-            p.body.position[0] = 0
+        if (p.body.position[0] > MOD_PHYS.app.renderer.width +p.body.boundingRadius -MOD_PHYS.offset) {
+            p.body.position[0] += -(MOD_PHYS.app.renderer.width+p.body.boundingRadius+2*MOD_PHYS.offset)
         }
-
-        console.log(p.body.position[1],p.body.velocity[1], p.reset.velocity)
     })
 }

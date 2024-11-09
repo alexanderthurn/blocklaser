@@ -135,6 +135,7 @@
                     .lineTo(w/2,-h/2)
                     .stroke('white')
                     c.deleteAction = startMODEmpty
+                    c.physics = null
                 }
 
                  // mod phys
@@ -148,6 +149,7 @@
                     .lineTo(w/2,-h/2)
                     .stroke('white')
                     c.deleteAction = startMODPhysics
+                    c.physics = null
                 }
 
                 c.x = w*x + w/2
