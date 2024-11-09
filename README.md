@@ -23,6 +23,10 @@ Build blocks by pointing at them. Wait some seconds and it materializes. Wait so
 
 A block is active if .laser is >= 100 and < 200
 
+## Game Ideas
+
+- [Tipsy Towers] (https://www.emanueleferonato.com/2017/12/15/tipsy-tower-html5-prototype-made-with-panda-2-a-powerful-javascript-based-game-development-platform/) Die gebauten Blöcle fallen herunter. Man muss einen Turm aufbauen
+
 
 ## Resources
 

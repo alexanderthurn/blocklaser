@@ -13,7 +13,8 @@ const rad2deg = rad => (rad * 180.0) / Math.PI;
 MOD_PHYS.createPhysicalBoxBody = (x,y,w,h,m) => {
     var body = new p2.Body({
         mass: m,
-        position: [x,y]
+        position: [x,y],
+        damping: 0.2
     })
     var shape = new p2.Box({ width: w, height: h })
     body.addShape(shape)
@@ -30,7 +31,8 @@ MOD_PHYS.createPhyiscalBoxPIXI = (x,y,w,h,m,options) => {
 MOD_PHYS.createPhysicalCircleBody = (x,y,r,m) => {
     var body = new p2.Body({
         mass: m,
-        position: [x,y]
+        position: [x,y],
+        damping: 0.2
     })
     var shape = new p2.Circle({ radius: r });
     body.addShape(shape)
