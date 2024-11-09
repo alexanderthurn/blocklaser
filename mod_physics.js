@@ -20,9 +20,9 @@ MOD_PHYS.createPhysicalBoxBody = (x,y,w,h,m) => {
     return body
 }
 
-MOD_PHYS.createPhyiscalBoxPIXI = (x,y,w,h,m) => {
+MOD_PHYS.createPhyiscalBoxPIXI = (x,y,w,h,m,options) => {
     var body = MOD_PHYS.createPhysicalBoxBody(x,y,w,h,m)
-    var pixi = new PIXI.Graphics(body.position[0], body.position[1]).rect(-w/2, -h/2, w, h).fill('white')
+    var pixi = new PIXI.Graphics(body.position[0], body.position[1]).rect(-w/2, -h/2, w, h).fill(options?.fill || 'white').stroke(options?.stroke || 'transparent')
     pixi.body = body
     return pixi
 }
@@ -84,7 +84,7 @@ MOD_PHYS.init = (boxContainer, freeContainer, app) => {
 
    
 
-  var ground = MOD_PHYS.createPhyiscalBoxPIXI(500,600,500,10,0)
+  var ground = MOD_PHYS.createPhyiscalBoxPIXI(500,600,500,10,0, {fill: 'transparent', stroke: 'white'})
     ground.body.angle = deg2rad(25)
     world.addBody(ground.body)
     freeContainer.addChild(ground)
