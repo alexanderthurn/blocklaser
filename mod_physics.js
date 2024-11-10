@@ -36,9 +36,9 @@ MOD_PHYS.createPhysicalCircleBody = (x,y,r,m) => {
     return body
 }
 
-MOD_PHYS.createPhysicalCirclePIXI = (x,y,r,m) => {
+MOD_PHYS.createPhysicalCirclePIXI = (x,y,r,m,options) => {
     var body = MOD_PHYS.createPhysicalCircleBody(x,y,r,m)
-    var pixi = new PIXI.Graphics(body.position[0], body.position[1]).circle(0,0, r).fill('white')
+    var pixi = new PIXI.Graphics(body.position[0], body.position[1]).circle(0,0, r).fill(options?.fill || 'white').stroke(options?.stroke || 'transparent')
     pixi.body = body
     return pixi
 }
@@ -106,6 +106,59 @@ MOD_PHYS.init = (app) => {
                 c.impulse = [-2000,0]
             }
 
+            // ball creation
+            if (x === 7 && y === 1 ){
+                c.shape
+                .rect(-app.BOX_WIDTH/2,-app.BOX_HEIGHT/2, app.BOX_WIDTH,app.BOX_HEIGHT)
+                .stroke('green')
+                .circle(0,0,20)
+                .stroke('green')
+                c.laser = 100
+                c.deleteAction = () => {
+                    var circle = MOD_PHYS.createPhysicalCirclePIXI(c.x -20 + Math.random()*40,c.y -20 + Math.random()*40,20,1, {fill: 'transparent', stroke: 'white'})
+                    circle.reset = null
+                    world.addBody(circle.body)
+                    MOD_PHYS.app.container2.addChild(circle)
+                    c.laser = 190
+                }
+                c.physics = null
+            }
+
+            // ball small creation
+            if (x === 9 && y === 1 ){
+                c.shape
+                .rect(-app.BOX_WIDTH/2,-app.BOX_HEIGHT/2, app.BOX_WIDTH,app.BOX_HEIGHT)
+                .stroke('green')
+                .circle(0,0,5)
+                .stroke('green')
+                c.laser = 100
+                c.deleteAction = () => {
+                    var circle = MOD_PHYS.createPhysicalCirclePIXI(c.x -20 + Math.random()*40,c.y -20 + Math.random()*40,5,1, {fill: 'transparent', stroke: 'white'})
+                    circle.reset = null
+                    world.addBody(circle.body)
+                    MOD_PHYS.app.container2.addChild(circle)
+                    c.laser = 190
+                }
+                c.physics = null
+            }
+
+            // cube creation
+            if (x === 11 && y === 1 ){
+                c.shape
+                .rect(-app.BOX_WIDTH/2,-app.BOX_HEIGHT/2, app.BOX_WIDTH,app.BOX_HEIGHT)
+                .stroke('green')
+                .rect(-10,-10, 10,20)
+                .stroke('green')
+                c.laser = 100
+                c.deleteAction = () => {
+                    var circle = MOD_PHYS.createPhyiscalBoxPIXI(c.x -20 + Math.random()*40,c.y -20 + Math.random()*40,10,20,5, {fill: 'transparent', stroke: 'white'})
+                    circle.reset = null
+                    world.addBody(circle.body)
+                    MOD_PHYS.app.container2.addChild(circle)
+                    c.laser = 190
+                }
+                c.physics = null
+            }
 
         }
     }

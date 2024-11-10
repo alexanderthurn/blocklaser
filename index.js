@@ -134,28 +134,28 @@
                
                 // mod empty
                 if (x === 0 && y === 0 ){
-                    c.shape = new PIXI.Graphics()
+                    c.shape
                     .rect(-w/2,-h/2, w,h)
-                    .stroke('white')
+                    .stroke('green')
                     .moveTo(-w/2,-h/2)
                     .lineTo(w/2,h/2)
                     .moveTo(-w/2,h/2)
                     .lineTo(w/2,-h/2)
-                    .stroke('white')
+                    .stroke('green')
                     c.deleteAction = startMODEmpty
                     c.physics = null
                 }
 
                  // mod phys
                  if (x === 0 && y === 2 ){
-                    c.shape = new PIXI.Graphics()
+                    c.shape
                     .rect(-w/2,-h/2, w,h)
-                    .stroke('white')
+                    .stroke('green')
                     .moveTo(0,0)
                     .lineTo(w/2,h/2)
                     .moveTo(0,0)
                     .lineTo(w/2,-h/2)
-                    .stroke('white')
+                    .stroke('green')
                     c.deleteAction = startMODPhysics
                     c.physics = null
                 }
