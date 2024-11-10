@@ -7,6 +7,25 @@ var MOD_PHYS = {
 const deg2rad = deg => deg * (Math.PI / 180);
 const rad2deg = rad => (rad * 180.0) / Math.PI;
 
+
+MOD_PHYS.createPhyiscalConcaveBody = (x,y,path,m) => {
+    var body = new p2.Body({
+        mass: m,
+        position: [x,y],
+        damping: 0.2
+    })
+    body.fromPolygon(path)
+    return body
+}
+
+
+MOD_PHYS.createPhyiscalConcavePIXI = (x,y,path,m,options) => {
+    var body = MOD_PHYS.createPhyiscalConcaveBody(x,y,path.map(e => [e.x, e.y]),m)
+    var pixi = new PIXI.Graphics(body.position[0], body.position[1]).poly(path).fill(options?.fill || 'white').stroke(options?.stroke || 'transparent')
+    pixi.body = body
+    return pixi
+}
+
 MOD_PHYS.createPhysicalBoxBody = (x,y,w,h,m) => {
     var body = new p2.Body({
         mass: m,
@@ -147,11 +166,11 @@ MOD_PHYS.init = (app) => {
                 c.shape
                 .rect(-app.BOX_WIDTH/2,-app.BOX_HEIGHT/2, app.BOX_WIDTH,app.BOX_HEIGHT)
                 .stroke('green')
-                .rect(-10,-10, 10,20)
+                .rect(-10,-20, 20,40)
                 .stroke('green')
                 c.laser = 100
                 c.deleteAction = () => {
-                    var circle = MOD_PHYS.createPhyiscalBoxPIXI(c.x -20 + Math.random()*40,c.y -20 + Math.random()*40,10,20,5, {fill: 'transparent', stroke: 'white'})
+                    var circle = MOD_PHYS.createPhyiscalBoxPIXI(c.x -20 + Math.random()*40,c.y -20 + Math.random()*40,20,40,5, {fill: 'transparent', stroke: 'white'})
                     circle.reset = null
                     world.addBody(circle.body)
                     MOD_PHYS.app.container2.addChild(circle)
@@ -159,6 +178,26 @@ MOD_PHYS.init = (app) => {
                 }
                 c.physics = null
             }
+
+            // triangle creation
+            if (x === 13 && y === 1 ){
+                var path = [{x: 0,y:-20},{x: -20,y:20},{x: 20,y:20}]
+                c.shape
+                .rect(-app.BOX_WIDTH/2,-app.BOX_HEIGHT/2, app.BOX_WIDTH,app.BOX_HEIGHT)
+                .stroke('green')
+                .poly(path)
+                .stroke('green')
+                c.laser = 100
+                c.deleteAction = () => {
+                    var circle = MOD_PHYS.createPhyiscalConcavePIXI(c.x -30 + Math.random()*60,c.y -30 + Math.random()*60,path,5, {fill: 'transparent', stroke: 'white'})
+                    circle.reset = null
+                    world.addBody(circle.body)
+                    MOD_PHYS.app.container2.addChild(circle)
+                    c.laser = 190
+                }
+                c.physics = null
+            }
+
 
         }
     }
