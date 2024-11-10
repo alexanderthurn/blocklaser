@@ -21,7 +21,8 @@ MOD_PHYS.createPhyiscalConcaveBody = (x,y,path,m) => {
 
 MOD_PHYS.createPhyiscalConcavePIXI = (x,y,path,m,options) => {
     var body = MOD_PHYS.createPhyiscalConcaveBody(x,y,path.map(e => [e.x, e.y]),m)
-    var pixi = new PIXI.Graphics(body.position[0], body.position[1]).poly(path).fill(options?.fill || 'white').stroke(options?.stroke || 'transparent')
+    var pathChangedFromPhysics = body.concavePath.map((e) => {return {x: e[0], y: e[1]}})
+    var pixi = new PIXI.Graphics(body.position[0], body.position[1]).poly(pathChangedFromPhysics).fill(options?.fill || 'white').stroke(options?.stroke || 'transparent')
     pixi.body = body
     return pixi
 }
