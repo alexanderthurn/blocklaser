@@ -171,7 +171,7 @@ MOD_PHYS.init = (app) => {
                 .stroke('green')
                 c.laser = 100
                 c.deleteAction = () => {
-                    var circle = MOD_PHYS.createPhyiscalBoxPIXI(c.x -20 + Math.random()*40,c.y -20 + Math.random()*40,20,40,5, {fill: 'transparent', stroke: 'white'})
+                    var circle = MOD_PHYS.createPhyiscalBoxPIXI(c.x -20 + Math.random()*40,c.y -20 + Math.random()*40,40,80,5, {fill: 'transparent', stroke: 'white'})
                     circle.reset = null
                     world.addBody(circle.body)
                     MOD_PHYS.app.container2.addChild(circle)
@@ -219,10 +219,10 @@ MOD_PHYS.init = (app) => {
       });*/
  
     // Create an empty dynamic body
-    var circle = MOD_PHYS.createPhysicalCirclePIXI(500,100,100,5)
-    circle.reset = MOD_PHYS.getCurrentBodyAsReset(circle.body)
-    world.addBody(circle.body)
-    MOD_PHYS.app.container2.addChild(circle)
+   // var circle = MOD_PHYS.createPhysicalCirclePIXI(500,100,100,5)
+   // circle.reset = MOD_PHYS.getCurrentBodyAsReset(circle.body)
+   // world.addBody(circle.body)
+   // MOD_PHYS.app.container2.addChild(circle)
 
     var ground = MOD_PHYS.createPhyiscalBoxPIXI(500,600,500,25,0, {fill: 'transparent', stroke: 'white'})
     ground.body.angle = deg2rad(25)
@@ -236,10 +236,10 @@ MOD_PHYS.init = (app) => {
     MOD_PHYS.app.container2.addChild(ground2)
 
  
-    var cube = MOD_PHYS.createPhyiscalBoxPIXI(210,110,150,150,10, {fill: 'transparent', stroke: 'white'})
+   // var cube = MOD_PHYS.createPhyiscalBoxPIXI(110,110,150,150,10, {fill: 'transparent', stroke: 'white'})
     //cube.reset = MOD_PHYS.getCurrentBodyAsReset(cube.body)
-    world.addBody(cube.body)
-    MOD_PHYS.app.container2.addChild(cube)
+    //world.addBody(cube.body)
+   // MOD_PHYS.app.container2.addChild(cube)
 }
 
 const fixedTimeStep = 1 / 60.0; // seconds
