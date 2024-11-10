@@ -190,10 +190,10 @@ MOD_PHYS.init = (app) => {
     MOD_PHYS.app.container2.addChild(ground)
 
 
-    var ground = MOD_PHYS.createPhyiscalBoxPIXI(2500,600,2000,25,0, {fill: 'transparent', stroke: 'white'})
-    ground.body.angle = deg2rad(-25)
-    world.addBody(ground.body)
-    MOD_PHYS.app.container2.addChild(ground)
+    var ground2 = MOD_PHYS.createPhyiscalBoxPIXI(1500,600,500,25,0, {fill: 'transparent', stroke: 'white'})
+    ground2.body.angle = deg2rad(-25)
+    world.addBody(ground2.body)
+    MOD_PHYS.app.container2.addChild(ground2)
 
  
     var cube = MOD_PHYS.createPhyiscalBoxPIXI(210,110,150,150,10, {fill: 'transparent', stroke: 'white'})
