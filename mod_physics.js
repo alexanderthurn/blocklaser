@@ -226,12 +226,14 @@ MOD_PHYS.init = (app) => {
 
     var ground = MOD_PHYS.createPhyiscalBoxPIXI(500,600,500,25,0, {fill: 'transparent', stroke: 'white'})
     ground.body.angle = deg2rad(25)
+    ground.fix = true
     world.addBody(ground.body)
     MOD_PHYS.app.container2.addChild(ground)
 
 
     var ground2 = MOD_PHYS.createPhyiscalBoxPIXI(1500,600,500,25,0, {fill: 'transparent', stroke: 'white'})
     ground2.body.angle = deg2rad(-25)
+    ground2.fix = true
     world.addBody(ground2.body)
     MOD_PHYS.app.container2.addChild(ground2)
 
@@ -268,18 +270,22 @@ MOD_PHYS.update = (dt) => {
         p.x = p.body.interpolatedPosition[0]
         p.y = p.body.interpolatedPosition[1]
         p.rotation = p.body.angle
-        if (p.y > MOD_PHYS.app.renderer.height + p.body.boundingRadius +MOD_PHYS.offset) {
-            if (p.reset) {
-               MOD_PHYS.applyResetOnBody(p.body, p.reset)
-            } else {
-                p.body.position[1] = -p.body.boundingRadius-2*MOD_PHYS.offset
+        if (!p.fix) {
+            if (p.y > MOD_PHYS.app.renderer.height + p.body.boundingRadius +MOD_PHYS.offset) {
+                if (p.reset) {
+                    MOD_PHYS.applyResetOnBody(p.body, p.reset)
+                } else {
+                    p.body.position[1] = -p.body.boundingRadius-2*MOD_PHYS.offset
+                }
             }
+            if (p.x < 0 -p.body.boundingRadius+MOD_PHYS.offset) {
+                p.body.position[0]+= MOD_PHYS.app.renderer.width+p.body.boundingRadius+2*MOD_PHYS.offset
+            }
+            if (p.x > MOD_PHYS.app.renderer.width +p.body.boundingRadius -MOD_PHYS.offset) {
+                p.body.position[0] += -(MOD_PHYS.app.renderer.width+p.body.boundingRadius+2*MOD_PHYS.offset)
+            }
+        
         }
-        if (p.x < 0 -p.body.boundingRadius+MOD_PHYS.offset) {
-            p.body.position[0]+= MOD_PHYS.app.renderer.width+p.body.boundingRadius+2*MOD_PHYS.offset
-        }
-        if (p.x > MOD_PHYS.app.renderer.width +p.body.boundingRadius -MOD_PHYS.offset) {
-            p.body.position[0] += -(MOD_PHYS.app.renderer.width+p.body.boundingRadius+2*MOD_PHYS.offset)
-        }
+     
     })
 }
